@@ -1,0 +1,19 @@
+{
+  "name": "redis-master",
+  "default_attributes": {
+    "redisio": {
+      "version": "4.0.10",
+      "default_settings": {
+        "name": "master",
+        "keepalive": 60,
+        "requirepass": "distributed_system2",
+        "maxmemorypolicy": "volatile-lru",
+        "backuptype": "aof"
+      }
+    }
+  },
+  "run_list": [
+    "recipe[redisio]",
+    "recipe[redisio::enable]"
+  ]
+}

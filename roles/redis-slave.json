@@ -1,0 +1,24 @@
+{
+  "name": "redis-slave",
+  "default_attributes": {
+    "redisio": {
+      "version": "4.0.10",
+      "default_settings": {
+        "name": "slave",
+        "keepalive": 60,
+        "requirepass": "distributed_system2",
+        "maxmemorypolicy": "volatile-lru",
+        "backuptype": "aof",
+        "masterauth": "distributed_system2",
+        "slaveof": {
+          "address": "",
+          "port": ""
+        }
+      }
+    }
+  },
+  "run_list": [
+    "recipe[redisio]",
+    "recipe[redisio::enable]"
+  ]
+}

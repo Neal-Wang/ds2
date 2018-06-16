@@ -1,0 +1,8 @@
+{
+  "name": "apache",
+  "default_attributes": {
+  },
+  "run_list": [
+    "recipe[ds2::apache]"
+  ]
+}

@@ -1,0 +1,112 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_zero
+  # You may wish to disable always updating cookbooks in CI or other testing environments.
+  # For example:
+  #   always_update_cookbooks: <%= !ENV['CI'] %>
+  always_update_cookbooks: true
+  roles_path: ../../roles
+  environments_path: ../../environments
+  data_bags_path: ../../data_bags
+
+verifier:
+  name: inspec
+
+platforms:
+  - name: ubuntu-16.04
+
+suites:
+  - name: mysql-master
+    driver_config:
+      network:
+        - ["private_network", {ip: "192.168.10.10"}]
+    run_list:
+      - recipe[ds2::mysql_master]
+    verifier:
+      inspec_tests:
+        - test/smoke/mysql_master
+    attributes:
+      ds2:
+        database:
+          id: 1
+          instance_name: master
+          host: 0.0.0.0
+          binlog_do_db: mysql
+
+  - name: mysql-slave
+    driver_config:
+      network:
+        - ["private_network", {ip: "192.168.10.11"}]
+    run_list:
+      - recipe[ds2::mysql_slave]
+    verifier:
+      inspec_tests:
+        - test/smoke/mysql_slave
+    attributes:
+      ds2:
+        database:
+          id: 2
+          instance_name: slave
+          host: 0.0.0.0
+          master_host: 192.168.10.10
+          database: mysql
+
+  - name: redis-master
+    driver_config:
+      network:
+        - ["private_network", {ip: "192.168.10.12"}]
+    run_list:
+      - role[redis-master]
+    verifier:
+      inspec_tests:
+        - test/smoke/redis_master
+    attributes:
+      redisio:
+        default_settings:
+          name: master
+          keepalive: 60
+          requirepass: distributed_system2
+          maxmemorypolicy: volatile-lru
+          backuptype: aof
+        servers:
+          - name: master
+            port: 6379
+
+  - name: redis-slave
+    driver_config:
+      network:
+        - ["private_network", {ip: "192.168.10.13"}]
+    run_list:
+      - role[redis-slave]
+    verifier:
+      inspec_tests:
+        - test/smoke/redis_slave
+    attributes:
+      redisio:
+        default_settings:
+          name: slave
+          keepalive: 60
+          requirepass: distributed_system2
+          maxmemorypolicy: volatile-lru
+          backuptype: aof
+          masterauth: distributed_system2
+          slaveof:
+            address: 192.168.10.12
+            port: 6379
+        servers:
+          - name: slave
+            port: 6379
+
+  - name: apache
+    driver_config:
+      network:
+        - ["private_network", {ip: "192.168.10.14"}]
+    run_list:
+      - recipe[apache]
+    verifier:
+      inspec_tests:
+        - test/smoke/apache
+    attributes:
