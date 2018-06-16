@@ -4,11 +4,16 @@
     "redisio": {
       "version": "4.0.10",
       "default_settings": {
+        "id": 1,
         "name": "master",
         "keepalive": 60,
         "requirepass": "distributed_system2",
         "maxmemorypolicy": "volatile-lru",
         "backuptype": "aof"
+      },
+      "servers": {
+        "name": "master",
+        "port": 6379
       }
     }
   },

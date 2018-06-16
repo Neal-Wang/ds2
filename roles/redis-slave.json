@@ -14,6 +14,10 @@
           "address": "",
           "port": ""
         }
+      },
+      "servers": {
+        "name": "slave",
+        "port": 6379
       }
     }
   },

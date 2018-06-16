@@ -1,0 +1,17 @@
+{
+  "name": "mysql-slave",
+  "default_attributes": {
+    "ds2": {
+      "database": {
+        "id": 2,
+        "instance_name": "slave",
+        "host": "0.0.0.0",
+        "master_host": "",
+        "database": "mysql",
+      }
+    }
+  },
+  "run_list": [
+    "recipe[ds2::mysql_slave]"
+  ]
+}

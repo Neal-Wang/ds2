@@ -105,7 +105,7 @@ suites:
       network:
         - ["private_network", {ip: "192.168.10.14"}]
     run_list:
-      - recipe[apache]
+      - role[apache]
     verifier:
       inspec_tests:
         - test/smoke/apache

@@ -1,0 +1,16 @@
+{
+  "name": "mysql-master",
+  "default_attributes": {
+    "ds2": {
+      "database": {
+        "id": 1,
+        "instance_name": "master",
+        "host": "0.0.0.0",
+        "binlog_do_db": "mysql",
+      }
+    }
+  },
+  "run_list": [
+    "recipe[ds2::mysql_master]"
+  ]
+}
